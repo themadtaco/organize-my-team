@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const db = require('./db/connection');
-
+const cTable = require('console.table');
 
 const initialPrompt = () => {
     return inquirer.prompt([
@@ -19,41 +19,140 @@ const initialPrompt = () => {
         } else if(answer === 'View all Employees') {
             viewEmployees();
         } else if(answer === 'Add a department') {
-            viewDepartments();
+            addDepartment();
         } else if(answer === 'Add a role') {
             addRole();
         } else if(answer === 'Add an employee') {
             addEmployee();
         } else if(answer === 'Update an existing employee role') {
             updateRole();
+        } else {
+            return;
         }
     });
 };
 
 const viewDepartments = () => {
-    // view department table
+    const sql = `SELECT * FROM department;`
+
+    db.query(sql, (err, res) => {
+        if (err) {
+            console.log(err);
+            return;
+        } else{
+            console.log(console.table(res));
+            initialPrompt();
+        }
+    })
 };
 
 const viewRoles = () => {
-    // view role table
+    const sql = `SELECT * FROM role;`
+
+    db.query(sql, (err, res) => {
+        if(err) {
+            console.log(err);
+            return;
+        } else{
+            console.log(console.table(res));
+            initialPrompt();
+        }
+    });
 };
 
 const viewEmployees = () => {
-    // view employee table
+    const sql =  `SELECT * FROM employee;`;
+
+    db.query(sql, (err, res) => {
+        if(err) {
+            console.log(err);
+            return;
+        } else{
+            console.log(console.table(res));
+            initialPrompt();
+        }
+    })
 };
 
 const addDepartment = () => {
-    // add a new row to department table
+    return inquirer.prompt([
+        {
+            type:'input',
+            name:'name',
+            message: 'What is the name of the department?'
+        }
+    ])
+    .then(depName => {
+        const sql = `INSERT INTO department (name) VALUES (?)`;
+        const params = [depName.name];
+        db.query(sql, params, (err, res) => {
+            if(err) {
+                console.log(err);
+                return;
+            } else{
+                console.log(`${depName.name} added!`);
+                initialPrompt();
+            }
+        })
+    })
 };
 
 // add a new role row to role table
 const addRole = () => {
-
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: 'What is the new Role name?'
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: "What is the new Role's salary?"
+        }
+    ])
+    .then(roleData => {
+        const sql = `INSERT INTO role (title, salary) VALUES (?, ?)`;
+        const params = [roleData.name, roleData.salary];
+        db.query(sql, params, (err, res) => {
+            if(err) {
+                console.log(err);
+                return;
+            } else {
+                console.log(`${roleData.name} role added!`);
+                initialPrompt();
+            }
+        });
+    });
 };
 
 // add an employee to employee table
 const addEmployee = () => {
-
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: "What is the employee's first name?"
+        },
+        {
+            type: 'input',
+            name: 'lastName',
+            message: "What is the employee's last name?"
+        }
+    ])
+    .then(eData => {
+        const sql = `INSERT INTO employee (first_name, last_name) VALUES (?, ?)`;
+        const params = [eData.firstName, eData.lastName];
+        db.query(sql, params, (err, res) => {
+            if(err) {
+                console.log(err);
+                return;
+            } else{
+                console.log(`${eData.firstName} ${eData.lastName} added!`);
+                initialPrompt();
+            }
+        })
+    })
 };
 
 // update an existing employee role
