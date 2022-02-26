@@ -32,6 +32,7 @@ const initialPrompt = () => {
     });
 };
 
+// view all departments
 const viewDepartments = () => {
     const sql = `SELECT * FROM department;`
 
@@ -46,8 +47,13 @@ const viewDepartments = () => {
     })
 };
 
+// view all roles
 const viewRoles = () => {
-    const sql = `SELECT * FROM role;`
+    const sql = `SELECT role.*, department.name
+                AS department_name
+                FROM role
+                LEFT JOIN department
+                ON role.department_id = department.id;`
 
     db.query(sql, (err, res) => {
         if(err) {
@@ -60,6 +66,7 @@ const viewRoles = () => {
     });
 };
 
+// view all employees
 const viewEmployees = () => {
     const sql =  `SELECT * FROM employee;`;
 
@@ -74,6 +81,7 @@ const viewEmployees = () => {
     })
 };
 
+// add a new department
 const addDepartment = () => {
     return inquirer.prompt([
         {

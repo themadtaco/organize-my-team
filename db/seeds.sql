@@ -1,3 +1,15 @@
+INSERT INTO department (name)
+VALUES
+    ('Developers'),
+    ('Management'),
+    ('Service');
+INSERT INTO role (title, salary, department_id)
+VALUES
+    ('Manager', 100000.00, 1),
+    ('Janitor', 35000.00, 2),
+    ('Customer Service', 40000.00, 3),
+    ('Jr Developer', 50000.00, 1),
+    ('Sr Developer', 75000.00, 2);
 INSERT INTO employee (first_name, last_name)
 VALUES
     ('Ronald', 'Donald'),
@@ -10,15 +22,3 @@ VALUES
     ('Amy', 'Winehouse'),
     ('General', 'Grevious'),
     ('Chimera', 'Grey');
-INSERT INTO role (title, salary)
-VALUES
-    ('Manager', 100000.00),
-    ('Janitor', 35000.00),
-    ('Customer Service', 40000.00),
-    ('Jr Developer', 50000.00),
-    ('Sr Developer', 75000.00);
-INSERT INTO department (name)
-VALUES
-    ('Developers'),
-    ('Management'),
-    ('Service');
