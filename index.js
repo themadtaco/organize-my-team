@@ -68,7 +68,11 @@ const viewRoles = () => {
 
 // view all employees
 const viewEmployees = () => {
-    const sql =  `SELECT * FROM employee;`;
+    const sql =  `SELECT employee.*, role.*
+                FROM employee
+                INNER JOIN role
+                ON employee.role_id = role.id;`;
+                // unfinished keep reading to join all neccessary columns 
 
     db.query(sql, (err, res) => {
         if(err) {
