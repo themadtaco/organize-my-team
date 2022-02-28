@@ -5,11 +5,11 @@ VALUES
     ('Service');
 INSERT INTO role (title, salary, department_id)
 VALUES
-    ('Manager', 100000.00, 1),
-    ('Janitor', 35000.00, 2),
+    ('Manager', 100000.00, 2),
+    ('Janitor', 35000.00, 3),
     ('Customer Service', 40000.00, 3),
     ('Jr Developer', 50000.00, 1),
-    ('Sr Developer', 75000.00, 2);
+    ('Sr Developer', 75000.00, 1);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
     ('Ronald', 'Donald',2, 2),

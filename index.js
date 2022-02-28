@@ -68,11 +68,12 @@ const viewRoles = () => {
 
 // view all employees
 const viewEmployees = () => {
-    const sql =  `SELECT employee.*, role.*
+    const sql =  `SELECT employee.id, employee.first_name, employee.last_name, role.title AS Job, role.salary, department.name AS department
                 FROM employee
                 INNER JOIN role
-                ON employee.role_id = role.id;`;
-                // unfinished keep reading to join all neccessary columns 
+                ON employee.role_id = role.id
+                INNER JOIN department
+                ON role.department_id = department.id`;
 
     db.query(sql, (err, res) => {
         if(err) {
@@ -121,11 +122,24 @@ const addRole = () => {
             type: 'input',
             name: 'salary',
             message: "What is the new Role's salary?"
+        },
+        {
+            type: 'list',
+            name: 'department',
+            message: 'What department does the new role belong to?',
+            choices: ['Developers', 'Management', 'Service']
         }
     ])
     .then(roleData => {
-        const sql = `INSERT INTO role (title, salary) VALUES (?, ?)`;
-        const params = [roleData.name, roleData.salary];
+        if (roleData.department === 'Developers') {
+            roleData.department = 1;
+        } else if (roleData.department === 'Management') {
+            roleData.department = 2;
+        } else {
+            roleData.department = 3;
+        }
+        const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
+        const params = [roleData.name, roleData.salary, roleData.department];
         db.query(sql, params, (err, res) => {
             if(err) {
                 console.log(err);
@@ -150,11 +164,43 @@ const addEmployee = () => {
             type: 'input',
             name: 'lastName',
             message: "What is the employee's last name?"
+        },
+        {
+            type: 'list',
+            name: 'role',
+            message: "What is your employee's role?",
+            choices: ['Manager', 'Janitor', 'Customer Service', 'Jr Developer','Sr Developer']
+        },
+        {
+            type: 'list',
+            name: 'manager',
+            message: "Who is your employee's manager?",
+            choices: ['Jon Snow', 'Doctor Strange', 'The Hound']
         }
     ])
     .then(eData => {
-        const sql = `INSERT INTO employee (first_name, last_name) VALUES (?, ?)`;
-        const params = [eData.firstName, eData.lastName];
+        // if statement for Manager options
+        if (eData.manager === 'Jon Snow') {
+            eData.manager = 2;
+        } else if(eData.manager === 'Doctor Strange') {
+            eData.manager = 3;
+        } else{
+            eData.manager = 7;
+        }
+        // if statement for Role choices
+        if (eData.role === 'Manager') {
+            eData.role = 1;
+        } else if (eData.role === 'Janitor') {
+            eData.role = 2;
+        }else if (eData.role === 'Customer Service') {
+            eData.role = 3;
+        }else if (eData.role === 'Jr Developer') {
+            eData.role = 4;
+        } else {
+            eData.role = 5;
+        }
+        const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
+        const params = [eData.firstName, eData.lastName, eData.role, eData.manager];
         db.query(sql, params, (err, res) => {
             if(err) {
                 console.log(err);
