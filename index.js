@@ -215,7 +215,87 @@ const addEmployee = () => {
 
 // update an existing employee role
 const updateRole = () => {
+    return inquirer.prompt([
+        {
+            type: 'list',
+            name: 'employee',
+            message: 'Which employee would you like to change the role of?',
+            choices: ['Ronald Donald', 'Jon Snow', 'Doctor Strange', 'Ricky Bobby', 'Biggie Smalls', 'Snoop Dogg', 'The Hound', 'Amy Winehouse', 'General Grevious', 'Chimera Grey']
+        },
+        {
+            type: 'list',
+            name: 'role', 
+            message: 'Which role?',
+            choices: ['Manager', 'Janitor', 'Customer Service', 'Jr Developer', 'Sr Developer']
+        }
+    ]).then(updatedData => {
+        const employeeName = updatedData.employee;
+        // assign employee choice to id
+        switch (updatedData.employee) {
+            case 'Ronald Donald':
+                updatedData.employee = 1;
+                break;
+            case 'Jon Snow':
+                updatedData.employee = 2;
+                break;
+            case 'Doctor Strange':
+                updatedData.employee = 3;
+                break;
+            case 'Ricky Bobby':
+                updatedData.employee = 4;
+                break;
+            case 'Biggie Smalls':
+                updatedData.employee = 5
+                break;
+            case 'Snoop Dogg':
+                updatedData.employee = 6;
+                break;
+            case 'The Hound':
+                updatedData.employee = 7;
+                break;
+            case 'Amy Winehouse':
+                updatedData.employee = 8;
+                break;
+            case 'General Grevious':
+                updatedData.employee = 9;
+                break;
+            case 'Chimera Grey':
+            updatedData.employee = 10;
+            break;
+        };
 
+        // assign roles a role_id
+        switch (updatedData.role) {
+            case 'Manager':
+                updatedData.role = 1;
+                break;
+            case 'Janitor':
+                updatedData.role = 2;
+                break;
+            case 'Customer Service':
+                updatedData.role = 3;
+                break;
+            case 'Jr Developer':
+                updatedData.role = 4;
+                break;
+            case 'Sr Developer':
+                updatedData.role = 5;
+                break;
+                
+        };
+        const sql = `UPDATE employee SET role_id = ?
+                    WHERE id = ?`;
+        const params = [updatedData.role, updatedData.employee];
+        db.query(sql, params, (err, res) => {
+            if(err) {
+                console.log(err);
+                return;
+            } else{
+                console.log(`${employeeName} has been updated!`);
+                initialPrompt();
+            }
+        });
+    });
 };
 
 // connect to the database
